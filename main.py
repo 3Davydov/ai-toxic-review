@@ -1,8 +1,8 @@
 import argparse
 from pathlib import Path
 
-from cmnt_clf.data import load_dataset, prepare, save_dataset
-from cmnt_clf.models import classifier
+from toxic_clf.data import load_dataset, prepare, save_dataset
+from toxic_clf.models import classifier
 
 
 def main():
@@ -14,20 +14,24 @@ def parse_args():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers(dest='cmd')
 
-    default_data_path = Path('./prepared-dataset')
+    default_raw_data_path = Path('toxic_clf/models/code-review-dataset-full.xlsx')
+    default_prepared_data_path = Path('toxic_clf/models/prepared-code-review-dataset-full')
     prepare_data_parser = subparsers.add_parser('prepare-data')
     prepare_data_parser.set_defaults(func=prepare_data)
     prepare_data_parser.add_argument(
         'input',
+        nargs='?',
         help='Path to load raw dataset',
         type=Path,
+		default=default_raw_data_path,
     )
     prepare_data_parser.add_argument(
         '-o',
         '--output',
+        nargs='?',
         help='Path to save prepared dataset to',
         type=Path,
-        default=default_data_path,
+        default=default_prepared_data_path,
     )
 
     predict_parser = subparsers.add_parser('classify')
@@ -37,7 +41,7 @@ def parse_args():
         '--dataset',
         help='Path to prepared dataset',
         type=Path,
-        default=default_data_path,
+        default=default_prepared_data_path,
     )
     predict_parser.add_argument(
         '-m',

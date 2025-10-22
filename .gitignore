@@ -1,0 +1,3 @@
+venv/
+toxic_clf/models/prepared-code-review-dataset-full/
+toxic_clf/__pycache__/
