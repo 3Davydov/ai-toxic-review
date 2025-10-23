@@ -28,6 +28,13 @@ def classic_ml(train_dataset, test_dataset):
 
     y_pred = clf.predict(X_test)
 
+    acc = accuracy_score(y_test, y_pred)
+    precision, recall, _, _ = precision_recall_fscore_support(y_test, y_pred, average='weighted')
+
+    print(f"Accuracy:  {acc}")
+    print(f"Precision: {precision}")
+    print(f"Recall:    {recall}")
+
     cm = confusion_matrix(y_test, y_pred)
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["Non-toxic", "Toxic"])
     disp.plot(cmap=plt.cm.Blues)
@@ -92,6 +99,11 @@ def roberta(train_dataset, test_dataset):
 
     model.save_pretrained("toxic_clf/models/roberta-pretrainded")
     tokenizer.save_pretrained("toxic_clf/models/roberta-pretrainded")
+
+    eval_results = trainer.evaluate()
+    print("Evaluation Results:")
+    for key, value in eval_results.items():
+        print(f"{key}: {value}")
 
     return
 
